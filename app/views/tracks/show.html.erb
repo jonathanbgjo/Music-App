@@ -1,0 +1,33 @@
+<h1>Title: <%= @track.title %></h1>
+<br>
+<h3>Ord: <%= @track.ord %></h1>
+<br>
+<h3>Bonus or Regular: <%= @track.bonus ? "Bonus" : "Regular" %></h1>
+<br>
+<h3>Lyrics:</h3>
+<%= ugly_lyrics(@track.lyrics) %>
+<h3>Notes on track:</h3>
+<% @notes.each do |note| %>
+    <%= render 'note', note: note, user: User.find_by(id: note.user_id) %>
+<% end %>
+<br>
+<form action="<%= notes_url %>" method = "POST">
+    <input type="hidden" name ="authenticity_token" value ="<%= form_authenticity_token %>">
+    <input type="hidden" name=note[track_id] value="<%= @track.id %>">
+    <textarea name="note[body]"></textarea> 
+
+    <input type="submit" value = "Post Comment">
+</form>
+
+<br>
+<a href="<%= album_url(@album) %>"><%= @album.title %></a>
+<br>
+<a href="<%= edit_track_url(@track) %>">Edit This Track</a>
+<br>
+<form action="<%= track_url(@track) %>" method="POST">
+    <input type="hidden" name="_method" value="DELETE">
+    <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
+    <input type="submit" value="Delete Track :c">
+</form>
+
+

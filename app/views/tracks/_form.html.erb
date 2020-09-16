@@ -1,0 +1,43 @@
+<% if action == :new %>
+    <% action_url = tracks_url %>
+    <% button_type = "Record Track" %>
+<% else %>
+    <% action_url = track_url(track.id) %>
+    <% button_type = "Edit Track" %>
+<% end %>
+
+<form action="<%= action_url %>" method="POST">
+    <% if action == :edit %>
+        <input type="hidden" name = "_method" value="PATCH">
+    <% end %>
+    <input type="hidden" name="authenticity_token" value = "<%= form_authenticity_token %>">
+
+    <label>Title</label>
+    <input type="text" name= "track[title]" value="<%= track.title %>">
+    <br>
+
+    <label>Ord</label>
+    <input type="number" name= "track[ord]" value="<%= track.ord %>">
+    <br>
+
+    <label>Album</label>
+    <select name="track[album_id]">
+        <% albums.each do |album| %>
+            <option value="<%= album.id %>" <%= "selected" if track.album_id == album.id %>><%= album.title %></option>
+        <% end %>
+    </select>
+
+    <br>
+    <label for="bonus">Bonus</label>
+    <input type="radio" name ="track[bonus]" value = "true" <%= "checked" if track.bonus == true %>>
+    <label for="regular">Regular</label>
+    <input type="radio" name ="track[bonus]" value = "false" <%= "checked" if track.bonus == false %>>
+    <br>
+    <label for="lyrics">Lyrics</label>
+    <textarea name="track[lyrics]">
+        <%= track.lyrics %>
+    </textarea>
+    <br>
+
+    <input type="submit" value = "<%= button_type %>">
+</form>
